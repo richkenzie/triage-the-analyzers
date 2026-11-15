@@ -5,6 +5,9 @@ import java.util.Locale;
 
 public class StudentSpecs {
 
+        private StudentSpecs() {
+        // static utility class; not meant to be instantiated
+    }
     public static Specification<Student> containsFirstName(String providedFirstName) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + providedFirstName.toLowerCase(Locale.ROOT) + "%");
