@@ -7,4 +7,20 @@
 
      Unlike the baseline, this file may grow, but every entry is a reviewed decision. -->
 <FindBugsFilter>
+    <!--
+      D1 (off): EI_EXPOSE_REP / EI_EXPOSE_REP2. Every finding is one of three designs that
+      share mutable objects on purpose:
+      - JPA entities (144 findings, 23 classes): Hibernate tracks changes through the
+        collection the entity holds, and Project Pulse edits entities through their getters;
+        defensive copies would silently stop those edits from being saved.
+      - Spring beans (29 findings, 26 classes): controllers and services keep the beans
+        injected into their constructors; that is dependency injection.
+      - DTOs and report holders (46 findings, 17 classes, e.g. UseCaseDto): records and data
+        carriers built for one request (by Jackson or a converter), read or serialized, then
+        discarded; none computes state from its collections.
+      Copying would change entity behavior and protect nothing in the other two groups.
+    -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>
