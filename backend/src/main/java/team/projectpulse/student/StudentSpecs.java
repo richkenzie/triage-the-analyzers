@@ -3,7 +3,7 @@ package team.projectpulse.student;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Locale;
 
-public class StudentSpecs {
+public final class StudentSpecs {
 
         private StudentSpecs() {
         // static utility class; not meant to be instantiated
