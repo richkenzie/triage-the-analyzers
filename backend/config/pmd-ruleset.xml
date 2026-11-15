@@ -16,6 +16,15 @@
      <!-- D2: re-added below, narrowed to non-entity classes -->
         <exclude name="UncommentedEmptyConstructor"/>
         <exclude name="UnnecessaryConstructor"/>
+        <!--
+          D4 (off): GuardLogStatement. Project Pulse logs through SLF4J with {} placeholders,
+          so the message is only formatted when the level is enabled; a guard saves only the
+          argument evaluation. All 4 flagged calls pass simple getters or size()
+          (ReminderService, WeeklyReminderScheduler, DocumentTemplateRegistry, AuthController),
+          so a guard adds an if-block per call for no measurable gain. Guard by hand any
+          argument that is expensive to compute.
+        -->
+        <exclude name="GuardLogStatement"/>
     </rule>
 
      <!--
