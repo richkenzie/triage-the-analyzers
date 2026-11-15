@@ -40,7 +40,7 @@ public class StudentSecurityService {
     public boolean isCurrentUserInstructorOfStudentSection(Integer studentId) {
         Integer instructorIdFromJwt = this.userUtils.getUserId();
         Student student = this.studentRepository.findById(studentId).orElse(null);
-        if (student == null) {
+        if (student == null) { // NOPMD - SimplifyBooleanReturns: null guard (unknown student -> deny), same style as InstructorSecurityService; rewrite changes no behavior
             return false;
         }
         return student.getSection().getInstructors().stream()
