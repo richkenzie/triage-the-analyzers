@@ -13,5 +13,31 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
     <description>PMD quickstart, with Project Pulse's decisions.</description>
     <rule ref="rulesets/java/quickstart.xml">
+     <!-- D2: re-added below, narrowed to non-entity classes -->
+        <exclude name="UncommentedEmptyConstructor"/>
+        <exclude name="UnnecessaryConstructor"/>
+    </rule>
+
+     <!--
+      D2 (narrow): UncommentedEmptyConstructor and UnnecessaryConstructor are off for
+      @Entity classes and enforced everywhere else.
+      Reason: JPA requires every entity to have a no-argument constructor. 25 of the 29
+      flagged classes are entities, and their empty constructors exist for that reason.
+      Removing one where it is the only constructor works today, but the first added
+      constructor with arguments would make Hibernate fail at runtime, not at compile time.
+      The 4 flagged non-entity classes (PeerEvaluationAverage, RatingAverage,
+      WeeklyPeerEvaluationReport, Result) had unused empty constructors, now removed.
+    -->
+    <rule ref="category/java/documentation.xml/UncommentedEmptyConstructor">
+        <properties>
+            <property name="violationSuppressXPath"
+                      value="./ancestor-or-self::ClassDeclaration[pmd-java:hasAnnotation('jakarta.persistence.Entity')]"/>
+        </properties>
+    </rule>
+    <rule ref="category/java/codestyle.xml/UnnecessaryConstructor">
+        <properties>
+            <property name="violationSuppressXPath"
+                      value="./ancestor-or-self::ClassDeclaration[pmd-java:hasAnnotation('jakarta.persistence.Entity')]"/>
+        </properties>
     </rule>
 </ruleset>
